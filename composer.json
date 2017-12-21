@@ -7,7 +7,11 @@
     }
   ],
   "minimum-stability": "dev",
-  "require": {},
+  "require": {
+    "php": ">=5.5.9",
+    "yunify/qingstor-sdk": "^2.2",
+    "league/flysystem": "^1.0"
+  },
   "type": "library",
   "license": "MIT",
   "autoload": {
