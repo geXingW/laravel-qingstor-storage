@@ -16,12 +16,12 @@ class QingStorProvider extends ServiceProvider
     public function boot()
     {
         \Storage::extend('QingStor', function ($app, $config) {
-            $client = QingstorClient::getInstance($config);
+            $client = QingStorClient::getInstance($config);
 
             $bucket = array_get($config, 'bucket');
             $zone = array_get($config, 'zone');
 
-            $adapter = new QingstorStorage($client, $bucket, $zone);
+            $adapter = new QingStorStorage($client, $bucket, $zone);
             return new Filesystem($adapter);
         });
     }
