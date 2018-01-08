@@ -11,6 +11,7 @@ namespace GeXingW\QingStorStorage;
 
 use League\Flysystem\Adapter\AbstractAdapter;
 use League\Flysystem\Config;
+use League\Flysystem\Util;
 
 class QingStorStorage extends AbstractAdapter
 {
@@ -46,8 +47,11 @@ class QingStorStorage extends AbstractAdapter
         try {
             $options = [
                 'body' => $contents,
+                'Content-Type' => Util::guessMimeType($path, $contents),
+                'Content-Length' => Util::contentSize($contents),
             ];
             $res = $this->bucket->putObject($path, $options);
+
             return $res->statusCode === 201 ? true : false;
         } catch (\Exception $e) {
             return false;
@@ -70,6 +74,7 @@ class QingStorStorage extends AbstractAdapter
                 'body' => $resource,
             ];
             $res = $this->bucket->putObject($path, $options);
+
             return $res->statusCode === 201 ? true : false;
         } catch (\Exception $e) {
             return false;
@@ -119,6 +124,7 @@ class QingStorStorage extends AbstractAdapter
                 'X-QS-Move-Source' => "/$this->bucketName/" . trim($path, '/')
             ];
             $res = $this->bucket->putObject($newpath, $options);
+
             return $res->statusCode ? true : false;
         } catch (\Exception $e) {
             exit($e->getMessage());
@@ -136,8 +142,10 @@ class QingStorStorage extends AbstractAdapter
     public function copy($path, $newpath)
     {
         try {
-            $options = ['x-qs-copy-source' => $path];
+            $sourcePath = "/$this->bucketName/" . trim($path, '/');
+            $options = ['X-QS-Copy-Source' => $sourcePath];
             $res = $this->bucket->putObject($newpath, $options);
+
             return $res->statusCode === 201 ? true : false;
         } catch (\Exception $e) {
             return false;
@@ -155,6 +163,7 @@ class QingStorStorage extends AbstractAdapter
     {
         try {
             $res = $this->bucket->deleteObject($path);
+
             return $res->statusCode === 204 ? true : false;
         } catch (\Exception $e) {
             return false;
@@ -212,6 +221,7 @@ class QingStorStorage extends AbstractAdapter
     {
         try {
             $res = $this->bucket->getObject($path);
+
             return $res->statusCode === 200 ? true : false;
         } catch (\Exception $e) {
             return false;
@@ -232,6 +242,7 @@ class QingStorStorage extends AbstractAdapter
             if ($res->statusCode !== 200) {
                 return false;
             }
+
             return [
                 "res" => $res->{'res'},
                 "statusCode" => $res->{'statusCode'},
@@ -245,7 +256,7 @@ class QingStorStorage extends AbstractAdapter
                 "x-qs-storage-class" => $res->{'x-qs-storage-class'},
                 "Server" => $res->{'Server'},
                 "body" => $res->{'body'},
-                "content" => $res
+                "contents" => $res
             ];
         } catch (\Exception $e) {
             return false;
@@ -267,6 +278,7 @@ class QingStorStorage extends AbstractAdapter
             if ($res->statusCode !== 200) {
                 return false;
             }
+
             return ['stream' => $res->body];
         } catch (\Exception $e) {
             return false;
@@ -305,6 +317,7 @@ class QingStorStorage extends AbstractAdapter
 
                 array_push($contents, $normalized);
             }
+
             return $contents;
         } catch (\Exception $e) {
             return [];
