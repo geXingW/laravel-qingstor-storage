@@ -54,6 +54,7 @@ class QingStorStorage extends AbstractAdapter
 
             return $res->statusCode === 201 ? true : false;
         } catch (\Exception $e) {
+            \Log::error($e);
             return false;
         }
     }
@@ -77,6 +78,7 @@ class QingStorStorage extends AbstractAdapter
 
             return $res->statusCode === 201 ? true : false;
         } catch (\Exception $e) {
+            \Log::error($e);
             return false;
         }
     }
@@ -127,6 +129,7 @@ class QingStorStorage extends AbstractAdapter
 
             return $res->statusCode ? true : false;
         } catch (\Exception $e) {
+            \Log::error($e);
             exit($e->getMessage());
         }
     }
@@ -148,6 +151,7 @@ class QingStorStorage extends AbstractAdapter
 
             return $res->statusCode === 201 ? true : false;
         } catch (\Exception $e) {
+            \Log::error($e);
             return false;
         }
     }
@@ -166,6 +170,7 @@ class QingStorStorage extends AbstractAdapter
 
             return $res->statusCode === 204 ? true : false;
         } catch (\Exception $e) {
+            \Log::error($e);
             return false;
         }
     }
@@ -224,6 +229,7 @@ class QingStorStorage extends AbstractAdapter
 
             return $res->statusCode === 200 ? true : false;
         } catch (\Exception $e) {
+            \Log::error($e);
             return false;
         }
     }
@@ -259,6 +265,7 @@ class QingStorStorage extends AbstractAdapter
                 "contents" => $res
             ];
         } catch (\Exception $e) {
+            \Log::error($e);
             return false;
         }
     }
@@ -281,6 +288,7 @@ class QingStorStorage extends AbstractAdapter
 
             return ['stream' => $res->body];
         } catch (\Exception $e) {
+            \Log::error($e);
             return false;
         }
     }
@@ -320,6 +328,7 @@ class QingStorStorage extends AbstractAdapter
 
             return $contents;
         } catch (\Exception $e) {
+            \Log::error($e);
             return [];
         }
     }
